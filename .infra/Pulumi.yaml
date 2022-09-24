@@ -1,0 +1,3 @@
+name: bitdispatch-functions
+description: Deply GCP Functions and PubSub Topics
+runtime: nodejs
