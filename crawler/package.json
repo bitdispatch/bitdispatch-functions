@@ -3,7 +3,8 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "deploy": "gcloud --project devkit-prod beta functions deploy crawler --runtime nodejs10 --trigger-resource post-fetched --trigger-event google.pubsub.topic.publish"
+    "deploy": "gcloud --project devkit-prod beta functions deploy crawler --runtime nodejs10 --trigger-resource post-fetched --trigger-event google.pubsub.topic.publish",
+    "start": "env-cmd -f ./.env.local.json npx functions-framework --target=crawler [--signature-type=cloudevent]"
   },
   "engines": {
     "node": "~10.15.0"
@@ -19,8 +20,10 @@
     "read-time-estimate": "0.0.2"
   },
   "devDependencies": {
+    "@google-cloud/functions-framework": "^3.1.2",
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.7.0"
+    "babel-preset-env": "^1.7.0",
+    "env-cmd": "^10.1.0"
   }
 }

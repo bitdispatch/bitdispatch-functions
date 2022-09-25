@@ -27,7 +27,7 @@ const specificMetaFixes = (pubId, url, meta) => {
 
 const formatMeta = (meta) =>
   Object.assign({}, meta, {
-    readTime: meta.readTime ? meta.readTime.duration : null,
+    readTime: meta.readTime ? Math.ceil(meta.readTime.duration) : null,
     paid: meta.paid === 'true',
     isMediumComment: meta.isMediumComment === 'true',
   });
@@ -80,7 +80,9 @@ function isEnglish(text) {
 }
 
 exports.crawler = (event) => {
-  const data = JSON.parse(Buffer.from(event.data, 'base64').toString());
+  //handle local testing event
+  const message = event.data || event.body.data.data
+  const data = JSON.parse(Buffer.from(message, 'base64').toString());
   // Get rid of source=rss* added by Medium
   data.url = data.url.replace(/\?source=rss(.*)/, '');
 

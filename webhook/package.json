@@ -3,12 +3,15 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "deploy": "gcloud --project devkit-prod beta functions deploy webhook --runtime nodejs10 --trigger-http --env-vars-file .env.yaml"
+    "deploy": "gcloud --project devkit-prod beta functions deploy webhook --runtime nodejs10 --trigger-http --env-vars-file .env.yaml",
+    "start": "env-cmd -f ./.env.local.json npx functions-framework --target=webhook [--signature-type=http]"
   },
   "engines": {
     "node": "~10.15.0"
   },
   "devDependencies": {
+    "@google-cloud/functions-framework": "^3.1.2",
+    "env-cmd": "^10.1.0",
     "request": "^2.88.0"
   },
   "dependencies": {

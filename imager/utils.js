@@ -4,6 +4,8 @@ const pubsub = new PubSub();
 const topic = pubsub.topic('post-keywords-extracted');
 // const topic = pubsub.topic('ad-image-processed');
 
+
+//todo - update this
 const num = '1';
 const link = `https://www.eventbrite.com/e/the-monthly-dev-1-by-dailydev-registration-133820993193`;
 const description = 'World-class talks by expert developers. Save your FREE seat today!';
@@ -14,6 +16,8 @@ const start = new Date('12/28/20Z');
 // const end = new Date(start.getTime() + 7 * 24 * 60 * 60 * 1000);
 const end = new Date('12/28/25Z');
 
+
+// this is the model of data expected going into this topic
 const data = {
   id: `TMD${num}`,
   link,
