@@ -14,7 +14,6 @@ const bucket = new gcp.storage.Bucket("bitdispatch-functions", {
 export const bucketName = bucket.url;
 
 
-// todo - load topics from externalized config?
 export const topics = createPubSubTopics();
 
 export const functions = createGCPFunctions(bucket);

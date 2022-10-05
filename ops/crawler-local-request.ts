@@ -37,7 +37,7 @@ interface PostFetchedOutputMessage {
 const message: PostFetchedOutputMessage = {
   id: "185976c940eb141db4cfffb9c0547875",
   title:
-    "Former Korean Finance Minister Joins Hashed Open Research to Promote Blockchain",
+    "Former Korean Finance Minister Joins Hashed Open Research to Promote Blockchain automatic",
   tags: ["industry"],
   publishedAt: "2022-08-28T12:02:19.000Z",
   updatedAt: "2022-08-28T12:02:19.000Z",

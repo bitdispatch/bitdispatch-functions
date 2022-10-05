@@ -16,4 +16,4 @@ node_modules/
 .npm
 
 dist/
-*.json
+.env.*.json

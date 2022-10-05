@@ -133,7 +133,9 @@ export const functions: FunctionConfig[] = [
     name: "crawler",
     path: "../crawler/",
     runtime: "nodejs16",
-    triggerHttp: true,
+    eventTrigger: {
+//todo
+    },
     labels: {
       'trigger-event': 'google.pubsub.topic.publish',
       'trigger-resource': 'post-fetched',
@@ -144,10 +146,12 @@ export const functions: FunctionConfig[] = [
     name: "imager",
     path: "../imager/",
     runtime: "nodejs16",
-    triggerHttp: true,
+    eventTrigger: {
+      //todo
+    },
     labels: {
       'trigger-event': 'google.pubsub.topic.publish',
-      'trigger-resource': 'post-keywords-extracted', //todo change to crawled-post
+      'trigger-resource': 'crawled-post', //todo change to crawled-post
       'publish-topic': 'post-image-processed'
     }
   },
