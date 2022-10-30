@@ -37,16 +37,16 @@ const sendOnePayload = (payloads) => {
 const payloads = fs.readFileSync('sources.csv')
   .toString()
   .split('\n')
-  .filter((line) =>   (line.indexOf('name') < 0 && line.indexOf('rss') < 0 && typeof line !== "undefined"))
+  .filter((line) => (line.indexOf('name') < 0 && line.indexOf('rss') < 0 && typeof line !== "undefined")) //remove header row and any blank rows
   .map((line) => {
-      const cols = line.split(',');
-      return {
-        'hub.mode': 'subscribe',
-        'hub.topic': cols[1],
-        'hub.callback': `${webhook}/${cols[0]}`,
-        'hub.secret': secret,
-        format: 'json',
-      };
+    const cols = line.split(',');
+    return {
+      'hub.mode': 'subscribe',
+      'hub.topic': cols[1].replace('\r', ''),
+      'hub.callback': `${webhook}/${cols[0]}`,
+      'hub.secret': secret,
+      format: 'json',
+    };
   });
 
 // console.log(payloads);

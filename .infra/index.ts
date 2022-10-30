@@ -13,8 +13,9 @@ const bucket = new gcp.storage.Bucket("bitdispatch-functions", {
 // Export the DNS name of the bucket
 export const bucketName = bucket.url;
 
-
-export const topics = createPubSubTopics();
+// todo - pass topic output name to functions as environment variable
+// topicName=post-fetched outputs as post-fetched-1as2341a..
+// export const topics = createPubSubTopics();
 
 export const functions = createGCPFunctions(bucket);
 
