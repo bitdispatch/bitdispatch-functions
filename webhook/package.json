@@ -3,8 +3,9 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "deploy": "gcloud --project devkit-prod beta functions deploy webhook --runtime nodejs10 --trigger-http --env-vars-file .env.yaml",
-    "start": "env-cmd -f ./.env.local.json npx functions-framework --target=webhook [--signature-type=http]"
+    "deploy": "gcloud --project bitdispatch-dev beta functions deploy webhook --runtime nodejs10 --trigger-http --env-vars-file .env.yaml",
+    "start": "env-cmd -f ./.env.local.json npx functions-framework --target=webhook [--signature-type=http]",
+    "upload": "env-cmd -f ./.env.superfeedr.json node utils.js"
   },
   "engines": {
     "node": "~10.15.0"

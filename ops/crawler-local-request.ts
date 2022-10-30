@@ -34,16 +34,50 @@ interface PostFetchedOutputMessage {
   url: string;
 }
 
+// const message: PostFetchedOutputMessage = {
+//   id: "185976c940eb141db4cfffb9c0547875",
+//   title:
+//     "First Mover Americas: Bitcoin Falls to $18.1K After CPI Data",
+//   tags: ["markets"],
+//   publishedAt: "2022-10-13T08:51:19.000Z",
+//   updatedAt: "2022-10-13T08:51:19.000Z",
+//   publicationId: "coindesk",
+//   url: "https://www.coindesk.com/markets/2022/10/13/first-mover-americas-bitcoin-falls-to-181k-after-cpi-data-huobis-ht-surges-70-since-monday/",
+// };
+
+// const message: PostFetchedOutputMessage = {
+//   id: "185976c940eb141db4cfffb9c0547875",
+//   title:
+//     "Skype Co-Founder Leads $13M Investment in Liquid-Cooled Bitcoin Mining Tech",
+//   tags: ["tech"],
+//   publishedAt: "2022-10-13T08:51:19.000Z",
+//   updatedAt: "2022-10-13T08:51:19.000Z",
+//   publicationId: "decrypt",
+//   url: "https://decrypt.co/111883/skype-cofounder-fabric-liquid-cooled-bitcoin-mining",
+// };
+
+// const message: PostFetchedOutputMessage = {
+//   id: "185976c940eb141db4cfffb9c0547875",
+//   title:
+//     "Bitcoin Volatility Falls to Two-Year Low as TradFi Markets Wobble",
+//   tags: ["tech"],
+//   publishedAt: "2022-10-13T08:51:19.000Z",
+//   updatedAt: "2022-10-13T08:51:19.000Z",
+//   publicationId: "decrypt",
+//   url: "https://decrypt.co/112174/bitcoin-volatility-falls-to-two-year-low-as-tradfi-markets-wobble",
+// };
+
 const message: PostFetchedOutputMessage = {
   id: "185976c940eb141db4cfffb9c0547875",
   title:
-    "Former Korean Finance Minister Joins Hashed Open Research to Promote Blockchain",
-  tags: ["industry"],
-  publishedAt: "2022-08-28T12:02:19.000Z",
-  updatedAt: "2022-08-28T12:02:19.000Z",
-  publicationId: "bitcoinist",
-  url: "https://bitcoinist.com/former-korean-finance-minister-joins-hashed-open-research-to-promote-blockchain/",
+    "North Koreas Lazarus Group Attacks Japanese Crypto Firms",
+  tags: ["business"],
+  publishedAt: "2022-10-13T08:51:19.000Z",
+  updatedAt: "2022-10-13T08:51:19.000Z",
+  publicationId: "decrypt",
+  url: "https://decrypt.co/112130/north-koreas-lazarus-group-attacks-japanese-crypto-firms",
 };
+
 
 const request: EventTriggerRequestBody = {
   context: {

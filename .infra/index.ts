@@ -13,8 +13,11 @@ const bucket = new gcp.storage.Bucket("bitdispatch-functions", {
 // Export the DNS name of the bucket
 export const bucketName = bucket.url;
 
-
-// todo - load topics from externalized config?
-export const topics = createPubSubTopics();
+// todo - pass topic output name to functions as environment variable
+// topicName=post-fetched outputs as post-fetched-1as2341a..
+// export const topics = createPubSubTopics();
 
 export const functions = createGCPFunctions(bucket);
+
+export const webhookUrl = functions.find((func) => func.name.toString() === 'webhook')?.httpsTriggerUrl
+console.log("Webhook Trigger URL: ", webhookUrl)
