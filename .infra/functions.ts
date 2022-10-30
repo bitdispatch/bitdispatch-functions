@@ -2,6 +2,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 import * as fs from "fs";
 import { FileArchive } from "@pulumi/pulumi/asset";
+import { PROJECT_LABELS } from "./labels";
 
 function loadEnvVars(path: string, env: string): { [key: string]: any } {
   const envFile = `.env.${env}.json`;
@@ -62,21 +63,50 @@ export function createGCPFunctions(
       bucket: bucket.name,
       source: distArchive,
     });
+    if (func.triggerHttp) {
+      const gcpFunction = new gcp.cloudfunctions.Function(func.name, {
+        description: func.description,
+        runtime: func.runtime,
+        availableMemoryMb: func.availableMemoryMb ?? 128,
+        triggerHttp: func.triggerHttp ?? false,
+        environmentVariables: loadEnvVars(func.path, pulumi.getStack()),
+        sourceArchiveBucket: bucket.name,
+        sourceArchiveObject: archive.name,
+        entryPoint: func.name,
+        labels: {
+          env: pulumi.getStack(),
+          ...PROJECT_LABELS
+          // ...func.labels
+        }
+      });
 
-    return new gcp.cloudfunctions.Function(func.name, {
-      description: func.description,
-      runtime: func.runtime,
-      availableMemoryMb: func.availableMemoryMb ?? 128,
-      triggerHttp: func.triggerHttp ?? false,
-      environmentVariables: loadEnvVars(func.path, pulumi.getStack()),
-      eventTrigger: func.eventTrigger,
-      sourceArchiveBucket: bucket.name,
-      sourceArchiveObject: archive.name,
-      labels: {
-        env: pulumi.getStack(),
-        ...func.labels
-      }
-    });
+      const binding = new gcp.cloudfunctions.FunctionIamBinding("webhook-unauthenticated-policy", {
+        project: gcpFunction.project,
+        region: gcpFunction.region,
+        cloudFunction: gcpFunction.name,
+        role: "roles/cloudfunctions.invoker",
+        members: ['allUsers']
+      })
+
+      return gcpFunction
+    } else {
+      return new gcp.cloudfunctions.Function(func.name, {
+        description: func.description,
+        runtime: func.runtime,
+        availableMemoryMb: func.availableMemoryMb ?? 128,
+        environmentVariables: loadEnvVars(func.path, pulumi.getStack()),
+        eventTrigger: func.eventTrigger,
+        sourceArchiveBucket: bucket.name,
+        sourceArchiveObject: archive.name,
+        entryPoint: func.name,
+        labels: {
+          env: pulumi.getStack(),
+          ...PROJECT_LABELS
+          // ...func.labels
+        }
+      });
+    }
+
   });
 }
 
@@ -121,37 +151,40 @@ export const functions: FunctionConfig[] = [
   {
     name: "webhook",
     path: "../webhook/",
-    runtime: "nodejs16",
+    runtime: "nodejs10",
     triggerHttp: true,
     labels: {
-      'trigger-event': 'external-http',
-      'trigger-resource': 'superfeeder',
+      'trigger-type': 'external-http',
+      'triggered-by': 'superfeeder',
       'publish-topic': 'post-fetched'
-    }
+    },
+
   },
   {
     name: "crawler",
     path: "../crawler/",
-    runtime: "nodejs16",
+    runtime: "nodejs10",
     eventTrigger: {
-//todo
+      eventType: "google.pubsub.topic.publish",
+      resource: "post-fetched"
     },
     labels: {
-      'trigger-event': 'google.pubsub.topic.publish',
-      'trigger-resource': 'post-fetched',
+      'trigger-type': 'google.pubsub.topic.publish',
+      'triggered-by': 'post-fetched',
       'publish-topic': 'crawled-post'
     }
   },
   {
     name: "imager",
     path: "../imager/",
-    runtime: "nodejs16",
+    runtime: "nodejs10",
     eventTrigger: {
-      //todo
+      eventType: "google.pubsub.topic.publish",
+      resource: "crawled-post"
     },
     labels: {
-      'trigger-event': 'google.pubsub.topic.publish',
-      'trigger-resource': 'crawled-post', //todo change to crawled-post
+      'trigger-type': 'google.pubsub.topic.publish',
+      'triggered-by': 'crawled-post',
       'publish-topic': 'post-image-processed'
     }
   },

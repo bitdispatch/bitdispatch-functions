@@ -3,7 +3,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "deploy": "gcloud --project devkit-prod beta functions deploy crawler --runtime nodejs10 --trigger-resource post-fetched --trigger-event google.pubsub.topic.publish",
+    "deploy": "gcloud --project bitdispatch-dev beta functions deploy crawler --runtime nodejs10 --trigger-resource post-fetched --trigger-event google.pubsub.topic.publish",
     "start": "env-cmd -f ./.env.local.json npx functions-framework --target=crawler [--signature-type=cloudevent]"
   },
   "engines": {
@@ -17,6 +17,7 @@
     "metascraper-date": "^3.11.4",
     "metascraper-title": "^3.12.1",
     "metascraper-url": "^3.12.1",
+    "oneai": "^0.4.6",
     "read-time-estimate": "0.0.2"
   },
   "devDependencies": {

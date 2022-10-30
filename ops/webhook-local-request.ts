@@ -40,6 +40,16 @@ const items: RSSItem[] = [
     published: 1661688139,
     updated: 1661688139,
   },
+  {
+    id: "https://decrypt.co/112130",
+    title:
+      "North Korea’s Lazarus Group Attacks Japanese Crypto Firms",
+    permalinkUrl:
+      "https://decrypt.co/112130/north-koreas-lazarus-group-attacks-japanese-crypto-firms",
+    categories: ["business"],
+    published: 1661688139,
+    updated: 1661688139,
+  },
 ];
 
 const sendRequest = async (pubId: string): Promise<any> => {
@@ -51,6 +61,7 @@ const sendRequest = async (pubId: string): Promise<any> => {
   return res;
 };
 
+console.log(items)
 sendRequest("bitcoinist")
   .then(() => {
     console.log(`Sent ${items.length} mock posts`);

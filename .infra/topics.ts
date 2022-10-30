@@ -1,5 +1,6 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
+import {PROJECT_LABELS} from "./labels";
 
 export function createPubSubTopics(): gcp.pubsub.Topic[] {
   return topics.map(
@@ -17,24 +18,26 @@ interface TopicConfig {
 
 export const topics: TopicConfig[] = [
   {
-    name: "crawled-post", //missing code how crawled-post is transformed and sent to post-keywords-extracted
+    name: "crawled-post", 
     labels: {
       producer: "crawler",
-      consumer: "unknown",
+      consumer: "imager",
+      ...PROJECT_LABELS
     },
   },
-  {
-    name: "post-keywords-extracted",
-    labels: {
-      producer: "imager/utils",
-      triggers: "imager",
-    },
-  },
+  // {
+  //   name: "post-keywords-extracted",
+  //   labels: {
+  //     producer: "imager/utils",
+  //     triggers: "imager",
+  //   },
+  // },
   {
     name: "post-fetched",
     labels: {
       producer: "webhook",
       triggers: "crawler",
+      ...PROJECT_LABELS
     },
   },
 ];

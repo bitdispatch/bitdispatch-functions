@@ -11,7 +11,10 @@ const duplicateTags = require("./duplicate_tags");
 const ignoredTags = require("./ignored_tags");
 const ignoredCryptocurrencies = require("./ignored_cryptocurrencies");
 const pubTags = require("./pub_tags");
+const bitcoinTerms = require("./bitcoin_tags");
 const topic = pubsub.topic("crawled-post");
+// const OneAi = require('oneai');
+// const oneaiClient = new OneAi(process.env.ONEAI_API_KEY);
 
 const specificMetaFixes = (pubId, url, meta) => {
   switch (pubId) {
@@ -68,48 +71,51 @@ const processTags = (data) => {
         if (duplicateTags[newT]) {
           return duplicateTags[newT];
         }
+        if (bitcoinTerms[newT]) {
+          return bitcoinTerms[newT]
+        }
         return newT;
       })
-      .filter((t) => t.length > 0 && ignoredTags.indexOf(t) < 0); //todo add ignoredCryptocurrencies here too?
+      .filter((t) => t.length > 0 && ignoredTags.indexOf(t) < 0 && ignoredCryptocurrencies.indexOf(t) < 0);
   }
   if (pubTags[data.publicationId]) {
     tags = tags.concat(pubTags[data.publicationId]);
   }
+
   tags = Array.from(new Set(tags));
   return Object.assign({}, data, { tags });
 };
 
-const extractTopics = (data) => {
-  if (data === undefined) {
+const extractTopics = async (item) => {
+  if (item === undefined) {
     // if post has been filtered out due to previous rules, exit
     return null
   }
-  console.log('extracting topics using OneAi...')
 
-  const url = "https://api.oneai.com/api/v0/pipeline"
+  //hardcode certain topics to always be pulled from title
+  title_keywords = Object.keys(bitcoinTerms).filter((key) =>
+    item.title.toLowerCase().indexOf(key) > 0).map((key) =>
+      bitcoinTerms[key])
 
-  const options = {
-    headers: {
-      "api-key": process.env.ONEAI_API_KEY,
-      "content-type": "application/json"
-    },
-    json: {
-      "input": data.url,
-      "input_type": "article",
-      "steps": [
-        {
-          "skill": "html-extract-article"
-        },
-        {
-          "skill": "article-topics"
-        }
-      ],
-    }
-  }
+  console.log(item)
+  // todo - analyze description / content tags?
+
+  //One Ai for automated topic extraction
+  //disabled for now to save costs 
+  // console.log('extracting topics using OneAi...')
+  // const pipeline = new oneaiClient.Pipeline(
+  //   oneaiClient.skills.htmlToArticle(),
+  //   oneaiClient.skills.topics()
+  // )
+  // const data = await pipeline.run(item.url)
+  // const topics = data.htmlArticle.topics.map(i => i.value.toLowerCase())
+
+  const topics = []
 
 
-
-  return data
+  //combine new tags with existing tags
+  item.tags = [].concat(item.tags, title_keywords, topics)
+  return processTags(item)
 }
 
 function isEnglish(text) {
@@ -192,12 +198,11 @@ exports.crawler = (event) => {
       return item
     })
     .then(extractTopics)
+    .then(processTags)
     .then((item) => {
       if (!item) {
         return Promise.resolve();
       }
-      console.log('after extractTopics')
-
 
       console.log(`[${data.id}] crawled post`, item);
       return topic.publish(Buffer.from(JSON.stringify(item)));

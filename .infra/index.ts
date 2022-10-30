@@ -17,3 +17,6 @@ export const bucketName = bucket.url;
 export const topics = createPubSubTopics();
 
 export const functions = createGCPFunctions(bucket);
+
+export const webhookUrl = functions.find((func) => func.name.toString() === 'webhook')?.httpsTriggerUrl
+console.log("Webhook Trigger URL: ", webhookUrl)
