@@ -97,7 +97,6 @@ const extractTopics = async (item) => {
     item.title.toLowerCase().indexOf(key) > 0).map((key) =>
       bitcoinTerms[key])
 
-  console.log(item)
   // todo - analyze description / content tags?
 
   //One Ai for automated topic extraction
